@@ -1,0 +1,39 @@
+version: '3'
+# A list of all the differeent services or containers that are going to be created when we run docker compose
+services:
+# This container is responsible for hosting our development server.
+  web:
+    build: 
+      context: .
+      #  This context option is essentially specifying where we want all the files and folders for this image to be pulled from.
+      dockerfile: Dockerfile.dev
+      #  This is going to be the location of the dockerfile that is going to be used to construct the image for this web service. 
+  #  Specify the image or the docker file that we are going to use to create this initial container before we were able to just specify build dot.
+# When we use build dot - build . it assumed that we had a docker file inside of the current working directory.  
+# specify the ports. We can specify a list of ports. To indicate a list we put down a single dash - 
+    ports:
+       - "8001:8001"
+    volumes:
+      - /app/node_modules
+      - .:/app
+      # The dash - means an array
+      #  this means do not try to map a folder up against node modules inside the container 
+        # second entry will do a dot which indicates the curent working directory , a colon
+       
+      #  Map the folder outside of the container into the app folder inside to meet 
+
+      # creating a second service with the name tests
+
+      # This container is responsible for running our tests and rerunning any time that any file inside our volume change.
+      
+  tests:
+    build: 
+      context: .
+      dockerfile: Dockerfile.dev
+    volumes:
+      - /app/node_modules
+      - .:/app
+
+      # Overriding the initial command when this test service is created or the test container is created.
+      # Making sure that it starts with NPM run test rather than the default NPM run start.
+    command: ["npm", "run", "test"]
